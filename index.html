@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="theme-color" content="#4CAF50">
+  <title>Påske Kryds & Bolle</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/screens.css">
+  <link rel="stylesheet" href="css/board.css">
+</head>
+<body>
+
+  <!-- ===== START SCREEN ===== -->
+  <div id="start-screen" class="screen">
+    <div class="start-content">
+
+      <div class="title-area">
+        <div class="easter-header-deco" id="header-deco"></div>
+        <h1 class="game-title">Påske<br>Kryds &amp; Bolle</h1>
+        <p class="game-subtitle" id="subtitle-pieces"></p>
+      </div>
+
+      <div class="player-setup">
+        <div class="player-input-group">
+          <div class="player-label bunny-label">
+            <span class="piece-icon" id="bunny-icon-label"></span>
+            <span>Påskekanin &nbsp;✕</span>
+          </div>
+          <input type="text" id="player1-name" class="player-input"
+                 placeholder="Spiller 1" maxlength="16" autocomplete="off"
+                 autocorrect="off" autocapitalize="words" spellcheck="false">
+        </div>
+
+        <div class="vs-divider">VS</div>
+
+        <div class="player-input-group">
+          <div class="player-label egg-label">
+            <span class="piece-icon" id="egg-icon-label"></span>
+            <span>Påskeæg &nbsp;○</span>
+          </div>
+          <input type="text" id="player2-name" class="player-input"
+                 placeholder="Spiller 2" maxlength="16" autocomplete="off"
+                 autocorrect="off" autocapitalize="words" spellcheck="false">
+        </div>
+      </div>
+
+      <button id="start-btn" class="btn btn-primary">
+        🌸&nbsp; Start Spil! &nbsp;🌸
+      </button>
+
+    </div>
+  </div>
+
+  <!-- ===== GAME SCREEN ===== -->
+  <div id="game-screen" class="screen">
+    <div class="game-header">
+      <button id="back-btn" class="btn btn-back">← Tilbage</button>
+      <div id="turn-indicator" class="turn-indicator">
+        <span id="turn-piece" class="turn-piece"></span>
+        <span id="turn-name" class="turn-name">–</span>
+        <span class="turn-text">sin tur</span>
+      </div>
+    </div>
+
+    <div class="board-container">
+      <div id="board" class="board">
+        <!-- SVG background injected by JS -->
+        <div id="cells-grid" class="cells-grid">
+          <!-- 9 cells injected by JS -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== RESULT SCREEN ===== -->
+  <div id="result-screen" class="screen">
+    <div class="result-content">
+      <div id="result-deco" class="result-deco"></div>
+      <h2 id="result-title" class="result-title"></h2>
+      <p id="result-subtitle" class="result-subtitle"></p>
+      <div class="result-buttons">
+        <button id="play-again-btn" class="btn btn-primary">
+          🥚&nbsp; Spil igen! &nbsp;🐰
+        </button>
+        <button id="new-game-btn" class="btn btn-secondary">
+          Nyt spil
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/game.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

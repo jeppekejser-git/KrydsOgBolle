@@ -1,0 +1,68 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&display=swap');
+
+:root {
+  /* Greens */
+  --green-dark:    #2E7D32;
+  --green-mid:     #4CAF50;
+  --green-light:   #8BC34A;
+  --green-grass:   #66BB6A;
+
+  /* Twigs */
+  --twig:          #5D4037;
+  --twig-light:    #8D6E63;
+
+  /* Bunny */
+  --bunny-main:    #FCCDD9;
+  --bunny-inner:   #F48FB1;
+  --bunny-nose:    #E91E63;
+
+  /* Egg */
+  --egg-yellow:    #FDD835;
+  --egg-band:      #F06292;
+  --egg-dot-blue:  #4FC3F7;
+  --egg-dot-green: #AED581;
+
+  /* Flowers */
+  --flower-white:  #FFFFFF;
+  --flower-pink:   #F8BBD0;
+  --flower-purple: #CE93D8;
+  --flower-yellow: #FFF176;
+  --flower-center: #FDD835;
+
+  /* UI */
+  --bg-start:      #E8F5E9;
+  --bg-start2:     #C8E6C9;
+  --bg-game:       #F1F8E9;
+  --bg-game2:      #DCEDC8;
+  --text-dark:     #1B5E20;
+  --text-mid:      #388E3C;
+  --white:         #FFFFFF;
+
+  --radius-lg:  24px;
+  --radius-md:  16px;
+  --radius-sm:  8px;
+  --shadow-soft: 0 4px 20px rgba(0,0,0,0.12);
+  --shadow-card: 0 2px 12px rgba(0,0,0,0.08);
+
+  --font: 'Nunito', 'Helvetica Neue', Arial, sans-serif;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: var(--font);
+  background: var(--bg-start);
+  overflow: hidden;
+}
+
+body {
+  position: fixed;
+  inset: 0;
+}
