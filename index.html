@@ -31,27 +31,36 @@
 
       <div class="player-setup">
         <div class="player-input-group">
-          <div class="player-label bunny-label">
-            <span class="piece-icon" id="bunny-icon-label"></span>
-            <span>Påskekanin &nbsp;✕</span>
+          <div class="player-label player1-label">
+            <span class="piece-icon" id="player1-icon-label"></span>
+            <span>Spiller 1 &nbsp;<span class="turn-marker">✕</span></span>
           </div>
           <input type="text" id="player1-name" class="player-input"
                  placeholder="Spiller 1" maxlength="16" autocomplete="off"
                  autocorrect="off" autocapitalize="words" spellcheck="false">
+          <div class="piece-selector" id="piece-selector-1"></div>
         </div>
 
         <div class="vs-divider">VS</div>
 
         <div class="player-input-group">
-          <div class="player-label egg-label">
-            <span class="piece-icon" id="egg-icon-label"></span>
-            <span>Påskeæg &nbsp;○</span>
+          <div class="player-label player2-label">
+            <span class="piece-icon" id="player2-icon-label"></span>
+            <span>Spiller 2 &nbsp;<span class="turn-marker">○</span></span>
           </div>
           <input type="text" id="player2-name" class="player-input"
                  placeholder="Spiller 2" maxlength="16" autocomplete="off"
                  autocorrect="off" autocapitalize="words" spellcheck="false">
+          <div class="piece-selector" id="piece-selector-2"></div>
         </div>
       </div>
+
+      <div class="bg-selector-section">
+        <div class="section-label">Baggrund</div>
+        <div class="bg-selector" id="bg-selector"></div>
+      </div>
+
+      <button id="clear-btn" class="btn btn-clear">↺ Ryd navne</button>
 
       <button id="start-btn" class="btn btn-primary">
         🌸&nbsp; Start Spil! &nbsp;🌸

@@ -5,7 +5,18 @@
 const App = (() => {
 
   // =============================================================
-  // SVG PIECES  — both use viewBox="0 0 100 100" for consistent sizing
+  // EMOJI HELPER
+  // =============================================================
+
+  function emojiSVG(emoji, label) {
+    return `<svg viewBox="0 0 100 100" width="100" height="100"
+                 xmlns="http://www.w3.org/2000/svg" aria-label="${label}">
+      <text x="50" y="68" font-size="70" text-anchor="middle">${emoji}</text>
+    </svg>`;
+  }
+
+  // =============================================================
+  // SVG PIECES  — 9 Easter-themed choices
   // =============================================================
 
   function bunnyHeadSVG() {
@@ -73,6 +84,94 @@ const App = (() => {
     </svg>`;
   }
 
+  const PIECES = [
+    { id: 'bunny',     label: 'Kanin',      fn: () => bunnyHeadSVG() },
+    { id: 'egg',       label: 'Æg',         fn: () => easterEggSVG() },
+    { id: 'chick',     label: 'Kylling',    fn: () => emojiSVG('🐣', 'Kylling') },
+    { id: 'lamb',      label: 'Lam',        fn: () => emojiSVG('🐑', 'Lam') },
+    { id: 'butterfly', label: 'Sommerfugl', fn: () => emojiSVG('🦋', 'Sommerfugl') },
+    { id: 'tulip',     label: 'Tulipan',    fn: () => emojiSVG('🌷', 'Tulipan') },
+    { id: 'carrot',    label: 'Gulerod',    fn: () => emojiSVG('🥕', 'Gulerod') },
+    { id: 'duck',      label: 'And',        fn: () => emojiSVG('🦆', 'And') },
+    { id: 'blossom',   label: 'Blomst',     fn: () => emojiSVG('🌸', 'Blomst') },
+  ];
+
+  function getPieceSVG(pieceId) {
+    const p = PIECES.find(p => p.id === pieceId);
+    return p ? p.fn() : PIECES[0].fn();
+  }
+
+  function getPieceLabel(pieceId) {
+    const p = PIECES.find(p => p.id === pieceId);
+    return p ? p.label : PIECES[0].label;
+  }
+
+  // =============================================================
+  // BACKGROUNDS — 5 board/screen themes
+  // =============================================================
+
+  const BACKGROUNDS = [
+    {
+      id: 'green',  label: 'Eng',    swatch: '#7CB342',
+      board: { g1: '#8BC34A', g2: '#558B2F', grass: '#7CB342', twig: '#5D4037' },
+      css:   { start1: '#E8F5E9', start2: '#C8E6C9', game1: '#F1F8E9', game2: '#DCEDC8', text: '#1B5E20' },
+    },
+    {
+      id: 'pink',   label: 'Have',   swatch: '#F48FB1',
+      board: { g1: '#FFF0F3', g2: '#F8BBD0', grass: '#F48FB1', twig: '#880E4F' },
+      css:   { start1: '#FCE4EC', start2: '#F8BBD0', game1: '#FFF0F5', game2: '#FCE4EC', text: '#880E4F' },
+    },
+    {
+      id: 'sky',    label: 'Himmel', swatch: '#64B5F6',
+      board: { g1: '#E3F2FD', g2: '#90CAF9', grass: '#64B5F6', twig: '#1565C0' },
+      css:   { start1: '#E3F2FD', start2: '#BBDEFB', game1: '#F0F8FF', game2: '#E3F2FD', text: '#0D47A1' },
+    },
+    {
+      id: 'purple', label: 'Aften',  swatch: '#CE93D8',
+      board: { g1: '#F3E5F5', g2: '#CE93D8', grass: '#AB47BC', twig: '#4A148C' },
+      css:   { start1: '#F3E5F5', start2: '#E1BEE7', game1: '#FAF0FF', game2: '#F3E5F5', text: '#4A148C' },
+    },
+    {
+      id: 'golden', label: 'Sol',    swatch: '#FFD54F',
+      board: { g1: '#FFFDE7', g2: '#FFF176', grass: '#F9A825', twig: '#E65100' },
+      css:   { start1: '#FFFDE7', start2: '#FFF9C4', game1: '#FFFFF0', game2: '#FFFDE7', text: '#BF360C' },
+    },
+  ];
+
+  // =============================================================
+  // PLAYER CHOICES STATE  (persisted to localStorage)
+  // =============================================================
+
+  let pieceChoice = {
+    X: localStorage.getItem('kog_piece_X') || 'bunny',
+    O: localStorage.getItem('kog_piece_O') || 'egg',
+  };
+  let bgChoice = localStorage.getItem('kog_bg') || 'green';
+
+  function savePiece(player, id) {
+    pieceChoice[player] = id;
+    try { localStorage.setItem('kog_piece_' + player, id); } catch (_) {}
+  }
+
+  function saveBg(id) {
+    bgChoice = id;
+    try { localStorage.setItem('kog_bg', id); } catch (_) {}
+  }
+
+  function getActiveBg() {
+    return BACKGROUNDS.find(b => b.id === bgChoice) || BACKGROUNDS[0];
+  }
+
+  function applyTheme(bgId) {
+    const bg = BACKGROUNDS.find(b => b.id === bgId) || BACKGROUNDS[0];
+    const r = document.documentElement.style;
+    r.setProperty('--bg-start',  bg.css.start1);
+    r.setProperty('--bg-start2', bg.css.start2);
+    r.setProperty('--bg-game',   bg.css.game1);
+    r.setProperty('--bg-game2',  bg.css.game2);
+    r.setProperty('--text-dark', bg.css.text);
+  }
+
   // =============================================================
   // BOARD BACKGROUND SVG
   // =============================================================
@@ -89,16 +188,20 @@ const App = (() => {
     </g>`;
   }
 
-  function boardSVG() {
+  function boardSVG(t) {
+    const g1   = t ? t.g1    : '#8BC34A';
+    const g2   = t ? t.g2    : '#558B2F';
+    const grass = t ? t.grass : '#7CB342';
+    const twig  = t ? t.twig  : '#5D4037';
     return `<svg class="board-bg" viewBox="0 0 360 360" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
       <defs>
         <radialGradient id="grassG" cx="50%" cy="50%" r="72%">
-          <stop offset="0%"   stop-color="#8BC34A"/>
-          <stop offset="100%" stop-color="#558B2F"/>
+          <stop offset="0%"   stop-color="${g1}"/>
+          <stop offset="100%" stop-color="${g2}"/>
         </radialGradient>
       </defs>
       <rect width="360" height="360" fill="url(#grassG)" rx="16"/>
-      <g stroke="#7CB342" stroke-width="1.2" opacity="0.35" stroke-linecap="round">
+      <g stroke="${grass}" stroke-width="1.2" opacity="0.35" stroke-linecap="round">
         <path d="M18 18 Q20  7 23 18"/>  <path d="M38 12 Q40  2 42 12"/>
         <path d="M78 24 Q80 13 83 24"/>  <path d="M198 16 Q201  5 204 16"/>
         <path d="M278 20 Q281  8 284 20"/> <path d="M332 14 Q334  4 337 14"/>
@@ -119,25 +222,25 @@ const App = (() => {
       ${flower(260, 260, 0.62, '#FFFFFF')} ${flower(336, 264, 0.68, '#F8BBD0')} ${flower(306, 338, 0.72, '#FFF176')}
       <!-- Twig grid -->
       <path d="M118 4 C116 48 124 88 117 130 C110 172 122 212 116 254 C110 296 120 330 117 356"
-            stroke="#5D4037" stroke-width="6" fill="none" stroke-linecap="round"/>
-      <path d="M117 50 C107 44 103 37 107 30"   stroke="#5D4037" stroke-width="3" fill="none" stroke-linecap="round"/>
-      <path d="M116 170 C127 162 131 154 127 146" stroke="#5D4037" stroke-width="3" fill="none" stroke-linecap="round"/>
-      <path d="M116 280 C106 273 102 265 107 257" stroke="#5D4037" stroke-width="3" fill="none" stroke-linecap="round"/>
+            stroke="${twig}" stroke-width="6" fill="none" stroke-linecap="round"/>
+      <path d="M117 50 C107 44 103 37 107 30"   stroke="${twig}" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <path d="M116 170 C127 162 131 154 127 146" stroke="${twig}" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <path d="M116 280 C106 273 102 265 107 257" stroke="${twig}" stroke-width="3" fill="none" stroke-linecap="round"/>
       <path d="M242 4 C244 48 236 88 243 130 C250 172 238 212 244 254 C250 296 240 330 243 356"
-            stroke="#5D4037" stroke-width="6" fill="none" stroke-linecap="round"/>
-      <path d="M243 62 C253 55 257 47 252 39"   stroke="#5D4037" stroke-width="3" fill="none" stroke-linecap="round"/>
-      <path d="M244 182 C233 174 229 166 234 158" stroke="#5D4037" stroke-width="3" fill="none" stroke-linecap="round"/>
-      <path d="M244 294 C255 287 259 279 254 271" stroke="#5D4037" stroke-width="3" fill="none" stroke-linecap="round"/>
+            stroke="${twig}" stroke-width="6" fill="none" stroke-linecap="round"/>
+      <path d="M243 62 C253 55 257 47 252 39"   stroke="${twig}" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <path d="M244 182 C233 174 229 166 234 158" stroke="${twig}" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <path d="M244 294 C255 287 259 279 254 271" stroke="${twig}" stroke-width="3" fill="none" stroke-linecap="round"/>
       <path d="M4 118 C48 116 88 124 130 117 C172 110 212 122 254 116 C296 110 330 120 356 117"
-            stroke="#5D4037" stroke-width="6" fill="none" stroke-linecap="round"/>
-      <path d="M50 117 C44 107 37 103 30 107"   stroke="#5D4037" stroke-width="3" fill="none" stroke-linecap="round"/>
-      <path d="M170 116 C162 127 154 131 146 127" stroke="#5D4037" stroke-width="3" fill="none" stroke-linecap="round"/>
-      <path d="M280 116 C273 106 265 102 257 107" stroke="#5D4037" stroke-width="3" fill="none" stroke-linecap="round"/>
+            stroke="${twig}" stroke-width="6" fill="none" stroke-linecap="round"/>
+      <path d="M50 117 C44 107 37 103 30 107"   stroke="${twig}" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <path d="M170 116 C162 127 154 131 146 127" stroke="${twig}" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <path d="M280 116 C273 106 265 102 257 107" stroke="${twig}" stroke-width="3" fill="none" stroke-linecap="round"/>
       <path d="M4 242 C48 244 88 236 130 243 C172 250 212 238 254 244 C296 250 330 240 356 243"
-            stroke="#5D4037" stroke-width="6" fill="none" stroke-linecap="round"/>
-      <path d="M64 243 C57 253 50 257 43 252"   stroke="#5D4037" stroke-width="3" fill="none" stroke-linecap="round"/>
-      <path d="M182 244 C174 233 166 229 158 234" stroke="#5D4037" stroke-width="3" fill="none" stroke-linecap="round"/>
-      <path d="M294 244 C287 255 279 259 271 254" stroke="#5D4037" stroke-width="3" fill="none" stroke-linecap="round"/>
+            stroke="${twig}" stroke-width="6" fill="none" stroke-linecap="round"/>
+      <path d="M64 243 C57 253 50 257 43 252"   stroke="${twig}" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <path d="M182 244 C174 233 166 229 158 234" stroke="${twig}" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <path d="M294 244 C287 255 279 259 271 254" stroke="${twig}" stroke-width="3" fill="none" stroke-linecap="round"/>
     </svg>`;
   }
 
@@ -164,9 +267,14 @@ const App = (() => {
   let boardReady = false;
 
   function setupBoard() {
+    // Always refresh SVG background to reflect current theme
+    const boardEl = document.getElementById('board');
+    const oldBg = boardEl.querySelector('.board-bg');
+    if (oldBg) oldBg.remove();
+    boardEl.insertAdjacentHTML('afterbegin', boardSVG(getActiveBg().board));
+
     if (boardReady) return;
     boardReady = true;
-    document.getElementById('board').insertAdjacentHTML('afterbegin', boardSVG());
     const grid = document.getElementById('cells-grid');
     grid.innerHTML = '';
     for (let i = 0; i < 9; i++) {
@@ -192,7 +300,7 @@ const App = (() => {
   // =============================================================
 
   function pieceHTML(player) {
-    return `<div class="piece">${player === 'X' ? bunnyHeadSVG() : easterEggSVG()}</div>`;
+    return `<div class="piece">${getPieceSVG(pieceChoice[player])}</div>`;
   }
 
   function renderPiece(index, player) {
@@ -227,7 +335,6 @@ const App = (() => {
     clearSelection();
     selectedIndex = index;
     document.querySelector(`.cell[data-index="${index}"]`)?.classList.add('piece-selected');
-    // Highlight empty cells as drop targets
     const state = Game.getState();
     state.board.forEach((val, i) => {
       if (val === null) {
@@ -254,7 +361,7 @@ const App = (() => {
 
   function updateTurnIndicator(state) {
     document.getElementById('turn-piece').innerHTML =
-      state.currentPlayer === 'X' ? bunnyHeadSVG() : easterEggSVG();
+      getPieceSVG(pieceChoice[state.currentPlayer]);
     document.getElementById('turn-name').textContent = state.players[state.currentPlayer];
 
     if (state.phase === 'move' && selectedIndex === null) {
@@ -274,7 +381,6 @@ const App = (() => {
     if (state.winner !== null) return;
 
     if (state.phase === 'place') {
-      // ── Placement phase ──────────────────────────────────────
       const player = state.currentPlayer;
       if (!Game.makeMove(index)) return;
 
@@ -292,23 +398,18 @@ const App = (() => {
       }
 
     } else {
-      // ── Move phase ────────────────────────────────────────────
       const board = state.board;
 
       if (selectedIndex === null) {
-        // No piece selected yet — pick one of the current player's pieces
         if (board[index] === state.currentPlayer) {
           selectPiece(index);
         }
       } else if (index === selectedIndex) {
-        // Tap same piece → deselect
         clearSelection();
         setMoveHint('Vælg en af dine brikker');
       } else if (board[index] === state.currentPlayer) {
-        // Tap another own piece → change selection
         selectPiece(index);
       } else if (board[index] === null) {
-        // Tap empty cell → execute move
         const from   = selectedIndex;
         const player = state.currentPlayer;
         clearSelection();
@@ -325,7 +426,6 @@ const App = (() => {
           }
         }
       }
-      // Tap opponent's piece → do nothing
     }
   }
 
@@ -343,19 +443,79 @@ const App = (() => {
       titleEl.textContent    = 'Uafgjort!';
       subtitleEl.textContent = 'En fjer i hatten til begge!';
     } else {
-      const name = state.players[state.winner];
-      if (state.winner === 'X') {
-        decoEl.innerHTML       = pieceHTML('X');
-        titleEl.textContent    = `${name} vandt!`;
-        subtitleEl.textContent = '🐰 Påskekaninen triumferer!';
-      } else {
-        decoEl.innerHTML       = pieceHTML('O');
-        titleEl.textContent    = `${name} vandt!`;
-        subtitleEl.textContent = '🥚 Påskeægget er bedst!';
-      }
+      const name  = state.players[state.winner];
+      const label = getPieceLabel(pieceChoice[state.winner]);
+      decoEl.innerHTML       = pieceHTML(state.winner);
+      titleEl.textContent    = `${name} vandt!`;
+      subtitleEl.textContent = `🎊 Tillykke, ${name}!`;
     }
 
     showScreen('result');
+  }
+
+  // =============================================================
+  // PIECE PICKER
+  // =============================================================
+
+  function renderPiecePicker(player, containerId) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+    container.innerHTML = '';
+    PIECES.forEach(piece => {
+      const btn = document.createElement('button');
+      btn.className = 'piece-option' + (pieceChoice[player] === piece.id ? ' selected' : '');
+      btn.type = 'button';
+      btn.title = piece.label;
+      btn.setAttribute('aria-label', piece.label);
+      btn.innerHTML = piece.fn();
+      btn.addEventListener('click', () => {
+        savePiece(player, piece.id);
+        const iconId = player === 'X' ? 'player1-icon-label' : 'player2-icon-label';
+        const iconEl = document.getElementById(iconId);
+        if (iconEl) iconEl.innerHTML = getPieceSVG(piece.id);
+        updateSubtitlePreview();
+        renderPiecePicker(player, containerId);
+      });
+      container.appendChild(btn);
+    });
+  }
+
+  function updateSubtitlePreview() {
+    const sub = document.getElementById('subtitle-pieces');
+    if (sub) {
+      sub.innerHTML =
+        `<span class="mini-piece">${getPieceSVG(pieceChoice.X)}</span>` +
+        `<span style="font-size:20px;color:#888;padding:0 6px;font-weight:900">vs</span>` +
+        `<span class="mini-piece">${getPieceSVG(pieceChoice.O)}</span>`;
+    }
+  }
+
+  // =============================================================
+  // BACKGROUND PICKER
+  // =============================================================
+
+  function renderBgPicker() {
+    const container = document.getElementById('bg-selector');
+    if (!container) return;
+    container.innerHTML = '';
+    BACKGROUNDS.forEach(bg => {
+      const btn = document.createElement('button');
+      btn.className = 'bg-option' + (bgChoice === bg.id ? ' selected' : '');
+      btn.type = 'button';
+      btn.title = bg.label;
+      btn.setAttribute('aria-label', bg.label);
+      btn.style.setProperty('--swatch', bg.swatch);
+      const label = document.createElement('span');
+      label.className = 'bg-option-label';
+      label.textContent = bg.label;
+      btn.appendChild(label);
+      btn.addEventListener('click', () => {
+        saveBg(bg.id);
+        applyTheme(bg.id);
+        renderBgPicker();
+      });
+      container.appendChild(btn);
+    });
   }
 
   // =============================================================
@@ -368,14 +528,12 @@ const App = (() => {
       '<span style="font-size:62px">🐣</span>' +
       '<span style="font-size:52px">🌷</span>';
 
-    const sub = document.getElementById('subtitle-pieces');
-    sub.innerHTML =
-      `<span class="mini-piece">${bunnyHeadSVG()}</span>` +
-      `<span style="font-size:20px;color:#888;padding:0 6px;font-weight:900">vs</span>` +
-      `<span class="mini-piece">${easterEggSVG()}</span>`;
-
-    document.getElementById('bunny-icon-label').innerHTML = bunnyHeadSVG();
-    document.getElementById('egg-icon-label').innerHTML   = easterEggSVG();
+    updateSubtitlePreview();
+    document.getElementById('player1-icon-label').innerHTML = getPieceSVG(pieceChoice.X);
+    document.getElementById('player2-icon-label').innerHTML = getPieceSVG(pieceChoice.O);
+    renderPiecePicker('X', 'piece-selector-1');
+    renderPiecePicker('O', 'piece-selector-2');
+    renderBgPicker();
   }
 
   // =============================================================
@@ -383,10 +541,18 @@ const App = (() => {
   // =============================================================
 
   function init() {
+    applyTheme(bgChoice);
     setupBoard();
     decorateStartScreen();
 
+    document.getElementById('clear-btn').addEventListener('click', () => {
+      document.getElementById('player1-name').value = '';
+      document.getElementById('player2-name').value = '';
+      document.getElementById('player1-name').focus();
+    });
+
     document.getElementById('start-btn').addEventListener('click', () => {
+      setupBoard(); // refresh background SVG
       const p1 = document.getElementById('player1-name').value.trim() || 'Spiller 1';
       const p2 = document.getElementById('player2-name').value.trim() || 'Spiller 2';
       Game.init(p1, p2);
@@ -401,6 +567,7 @@ const App = (() => {
     });
 
     document.getElementById('play-again-btn').addEventListener('click', () => {
+      setupBoard(); // refresh background SVG
       Game.reset();
       resetBoard();
       updateTurnIndicator(Game.getState());

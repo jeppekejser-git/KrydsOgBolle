@@ -4,7 +4,7 @@
  * Strategi: netværk først, cache som fallback (offline-support).
  */
 
-const CACHE = 'paske-kryds-bolle-v3';
+const CACHE = 'paske-kryds-bolle-v4';
 
 const ASSETS = [
   './',
