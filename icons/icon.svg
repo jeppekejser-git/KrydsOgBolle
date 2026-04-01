@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- Background -->
+  <rect width="512" height="512" rx="100" fill="#4CAF50"/>
+  <rect width="512" height="512" rx="100" fill="url(#bg)"/>
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="40%" r="65%">
+      <stop offset="0%" stop-color="#8BC34A"/>
+      <stop offset="100%" stop-color="#2E7D32"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Twig grid lines -->
+  <path d="M170 40 C167 140 174 240 168 340 C162 420 170 480 168 510"
+        stroke="#5D4037" stroke-width="14" fill="none" stroke-linecap="round"/>
+  <path d="M342 40 C345 140 336 240 343 340 C350 420 340 480 343 510"
+        stroke="#5D4037" stroke-width="14" fill="none" stroke-linecap="round"/>
+  <path d="M40 170 C140 167 240 174 340 168 C420 162 480 170 510 168"
+        stroke="#5D4037" stroke-width="14" fill="none" stroke-linecap="round"/>
+  <path d="M40 342 C140 345 240 336 340 343 C420 350 480 340 510 343"
+        stroke="#5D4037" stroke-width="14" fill="none" stroke-linecap="round"/>
+
+  <!-- Bunny head (top-left cell, centered ~85,85) -->
+  <g transform="translate(85,85) scale(0.7)">
+    <ellipse cx="-28" cy="-38" rx="16" ry="30" fill="#FCCDD9"/>
+    <ellipse cx="28"  cy="-38" rx="16" ry="30" fill="#FCCDD9"/>
+    <ellipse cx="-28" cy="-38" rx="8"  ry="21" fill="#F48FB1"/>
+    <ellipse cx="28"  cy="-38" rx="8"  ry="21" fill="#F48FB1"/>
+    <ellipse cx="0" cy="8" rx="42" ry="38" fill="#FCCDD9"/>
+    <circle cx="-16" cy="2"  r="7" fill="#3E2723"/>
+    <circle cx="16"  cy="2"  r="7" fill="#3E2723"/>
+    <circle cx="-14" cy="0"  r="3" fill="white"/>
+    <circle cx="18"  cy="0"  r="3" fill="white"/>
+    <ellipse cx="0" cy="14" rx="7" ry="5" fill="#E91E63"/>
+  </g>
+
+  <!-- Easter egg (bottom-right cell, centered ~427,427) -->
+  <g transform="translate(427,427) scale(0.72)">
+    <path d="M0 -58 C28 -58 48 -30 48 0 C48 34 28 58 0 58 C-28 58 -48 34 -48 0 C-48 -30 -28 -58 0 -58Z"
+          fill="#FDD835"/>
+    <path d="M-46 0 C-46 0 -28 -12 0 -12 C28 -12 46 0 46 0 C46 0 28 12 0 12 C-28 12 -46 0 -46 0Z"
+          fill="#F06292"/>
+    <circle cx="-18" cy="-30" r="7"  fill="#4FC3F7"/>
+    <circle cx="18"  cy="-30" r="7"  fill="#AED581"/>
+    <circle cx="-18" cy="32"  r="7"  fill="#AED581"/>
+    <circle cx="18"  cy="32"  r="7"  fill="#4FC3F7"/>
+    <path d="M0 -58 C28 -58 48 -30 48 0 C48 34 28 58 0 58 C-28 58 -48 34 -48 0 C-48 -30 -28 -58 0 -58Z"
+          fill="none" stroke="#F9A825" stroke-width="3"/>
+  </g>
+
+  <!-- Small flowers for decoration -->
+  <!-- Top-right cell -->
+  <g transform="translate(427,85) scale(0.55)">
+    <circle cx="0"   cy="-18" r="11" fill="#FFFFFF" opacity="0.85"/>
+    <circle cx="17"  cy="-6"  r="11" fill="#FFFFFF" opacity="0.85"/>
+    <circle cx="11"  cy="15"  r="11" fill="#FFFFFF" opacity="0.85"/>
+    <circle cx="-11" cy="15"  r="11" fill="#FFFFFF" opacity="0.85"/>
+    <circle cx="-17" cy="-6"  r="11" fill="#FFFFFF" opacity="0.85"/>
+    <circle cx="0"   cy="0"   r="11" fill="#FDD835"/>
+  </g>
+  <!-- Bottom-left cell -->
+  <g transform="translate(85,427) scale(0.55)">
+    <circle cx="0"   cy="-18" r="11" fill="#F8BBD0" opacity="0.85"/>
+    <circle cx="17"  cy="-6"  r="11" fill="#F8BBD0" opacity="0.85"/>
+    <circle cx="11"  cy="15"  r="11" fill="#F8BBD0" opacity="0.85"/>
+    <circle cx="-11" cy="15"  r="11" fill="#F8BBD0" opacity="0.85"/>
+    <circle cx="-17" cy="-6"  r="11" fill="#F8BBD0" opacity="0.85"/>
+    <circle cx="0"   cy="0"   r="11" fill="#FDD835"/>
+  </g>
+</svg>
