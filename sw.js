@@ -3,7 +3,7 @@
  * Cacher alle app-filer ved installation så spillet virker offline.
  */
 
-const CACHE = 'paske-kryds-bolle-v1';
+const CACHE = 'paske-kryds-bolle-v2';
 
 const ASSETS = [
   '/',
