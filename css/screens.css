@@ -274,6 +274,7 @@
 
 .board-container {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   flex: 1;
@@ -301,11 +302,18 @@
   animation: decoAppear 0.55s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
 }
 
-.result-deco svg {
-  width: 110px;
-  height: 130px;
+/* piece wrapper used in result screen */
+.result-deco .piece {
+  width: 120px;
+  height: 120px;
   animation: decoAppear 0.55s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
   filter: drop-shadow(0 6px 16px rgba(0,0,0,0.18));
+}
+
+.result-deco .piece svg {
+  width: 100%;
+  height: 100%;
+  animation: none; /* parent handles entrance */
 }
 
 @keyframes decoAppear {
